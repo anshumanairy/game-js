@@ -5,8 +5,8 @@ var explosionIm;
 
 function startGame() {
     myGameArea.start();
-    myShip = new component(40, 40, "ship.png", 230, 580,"image");
-    explosionIm = new component(0, 0,"kill_effect.gif", 100, 100, "image");
+    myShip = new component(40, 40, "../media/ship.png", 230, 580,"image");
+    explosionIm = new component(0, 0,"../media/kill_effect.gif", 100, 100, "image");
 }
 
 var myGameArea = {
@@ -125,7 +125,7 @@ function updateGameArea(){
     if( myGameArea.frameNo == 1 || everyinterval(100)){
         x = myGameArea.canvas.width;
         y = Math.floor(Math.random()*(200))
-        enemyShip.push(new component(60, 60, "enemy.png", x, y,"image")); 
+        enemyShip.push(new component(60, 60, "../media/enemy.png", x, y,"image")); 
     }
     for(i=0;i<enemyShip.length;i+=1){
         enemyShip[i].x += -1.5;
@@ -144,7 +144,7 @@ function updateGameArea(){
         if(myGameArea.bulletFreq && everybullet(20)){
             xm = myShip.x;
             ym = myShip.y;
-            myBullet.push(new component(25, 25, "missile.gif", xm, ym,"image")); 
+            myBullet.push(new component(25, 25, "../media/missile.gif", xm, ym,"image")); 
         }
     }
     for(j=0;j<myBullet.length;j+=1){
