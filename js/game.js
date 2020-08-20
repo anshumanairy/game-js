@@ -2,11 +2,18 @@ var myShip;
 var enemyShip = [];
 var myBullet = [];
 var explosionIm;
+var score = 0 ;
+
+document.getElementById("score").innerHTML = score.toString().padStart(5, "0");;
 
 function startGame() {
     myGameArea.start();
     myShip = new component(40, 40, "../media/ship.png", 230, 580,"image");
     explosionIm = new component(0, 0,"../media/kill_effect.gif", 100, 100, "image");
+}
+
+function updateScore(){
+	document.getElementById("score").innerHTML = score.toString().padStart(5, "0");;
 }
 
 var myGameArea = {
@@ -54,6 +61,8 @@ function explosion(x,y){
     explosionIm.y = y;
     explosionIm.height = 80;
     explosionIm.width = 80;
+    score++;
+    updateScore();
     setTimeout(function(){
         explosionIm.height =0;
         explosionIm.width =0;
