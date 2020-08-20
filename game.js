@@ -1,10 +1,12 @@
 var myShip;
 var enemyShip = [];
 var myBullet = [];
+var explosionIm;
 
 function startGame() {
     myGameArea.start();
     myShip = new component(40, 40, "ship.png", 230, 580,"image");
+    explosionIm = new component(0, 0,"kill_effect.gif", 100, 100, "image");
 }
 
 var myGameArea = {
@@ -27,6 +29,9 @@ var myGameArea = {
     },
     clear : function(){
         this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
+    },
+    stop : function(){
+        clearInterval(this.interval)
     }
 }
 
@@ -42,6 +47,17 @@ function everybullet(n){
         return true;
     }
     return false;
+}
+
+function explosion(x,y){
+    explosionIm.x = x;
+    explosionIm.y = y;
+    explosionIm.height = 80;
+    explosionIm.width = 80;
+    setTimeout(function(){
+        explosionIm.height =0;
+        explosionIm.width =0;
+    },200);
 }
 
 function component(width, height, color, x, y,type) {
@@ -75,10 +91,36 @@ function component(width, height, color, x, y,type) {
         }
         this.y += this.speedY;
     }
+    this.crashwith = function(otherobj){
+        var myleft = this.x;
+        var mytop = this.y;
+        var mybottom = this.y + this.height;
+        var myright = this.x + this.width;
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var crash = true;
+        if ((mybottom < othertop)||(mytop > otherbottom)||(myright<otherleft)||(myleft>otherright)){
+            crash = false;
+        }
+        return crash;
+    }
 }
 
 function updateGameArea(){
     myGameArea.clear();
+    for(i=0;i<enemyShip.length;i+=1){
+        for(j=0;j<myBullet.length;j+=1){
+            if (enemyShip[i].crashwith(myBullet[j])){
+                ex=enemyShip[i].x;
+                ey=enemyShip[i].y;
+                explosion(ex,ey);
+                enemyShip.splice(i,1);
+                myBullet.splice(j,1);
+            }
+        }
+    }
     myGameArea.frameNo +=1;
     if( myGameArea.frameNo == 1 || everyinterval(100)){
         x = myGameArea.canvas.width;
@@ -111,4 +153,5 @@ function updateGameArea(){
     }
     myShip.newPos();
     myShip.update();
+    explosionIm.update()
 }
